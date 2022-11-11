@@ -1,0 +1,8 @@
+.avatar-image{
+    width: 80px;
+    clip-path: circle(50% at 50% 50%);
+}
+.avatar-image:hover{
+    width: 70px;
+    border:5px black solid
+}
