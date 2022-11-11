@@ -6,6 +6,7 @@ import axios from 'axios';
 import { addLatestMessage } from '../State Mangement/ConversationSlice';
 import { addMessage } from '../State Mangement/MessageSlice';
 import { io } from "socket.io-client";
+import { format, render, cancel, register } from 'timeago.js';
 
 
 export default function ChatBox() {
@@ -62,6 +63,12 @@ export default function ChatBox() {
         socket.current = io("ws://localhost:8800");
     }, []);
 
+    const typing = (e) => {
+        setTypedMessage(e);
+    }
+
+
+
 
     useEffect(() => {
         scroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -84,13 +91,13 @@ export default function ChatBox() {
                                     return <Stack sx={{ width: '100%', alignItems: 'flex-end' }} key={indx} ref={scroll}>
                                         <Stack sx={{ backgroundColor: "text.main", borderRadius: "15px", padding: "5px 8px", maxWidth: "40%", alignItems: 'flex-end', justifyContent: 'flex-end' }}>
                                             <Typography variant='h4' sx={{ fontSize: "15px", alignItems: "flex-end" }}>{curr?.text}</Typography>
-                                            <Typography variant='h5' sx={{ fontSize: "12px" }}>21 min ago</Typography>
+                                            <Typography variant='h5' sx={{ fontSize: "12px" }}>{format((curr?.createdAt))}</Typography>
                                         </Stack>
                                     </Stack>
                                 } else {
                                     return <Stack sx={{ backgroundColor: "otherColor.main", borderRadius: "15px", padding: "5px 8px", maxWidth: "40%" }} key={indx} ref={scroll}>
                                         <Typography variant='h4' sx={{ fontSize: "15px" }}>{curr?.text}</Typography>
-                                        <Typography variant='h5' sx={{ fontSize: "12px" }}>21 min ago</Typography>
+                                        <Typography variant='h5' sx={{ fontSize: "12px" }}>{format((curr?.createdAt))}</Typography>
                                     </Stack>
                                 }
                             })
@@ -100,9 +107,7 @@ export default function ChatBox() {
                     <Stack sx={{ flexDirection: "row", backgroundColor: "text.main", position: "absolute", bottom: "0px", padding: "5px 13px", width: "71vw", justifyContent: "space-between", gap: "20px" }}>
                         <InputEmoji
                             value={typedMessage}
-                            onChange={(e) => {
-                                setTypedMessage(e);
-                            }}
+                            onChange={typing}
                             borderRadius={10}
                             placeholder={"Message"}
                             fontSize={14}
